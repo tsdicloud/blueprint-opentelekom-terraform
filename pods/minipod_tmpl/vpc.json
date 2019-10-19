@@ -1,0 +1,23 @@
+{
+  "otc_project": "eu-de_doaasproj",
+  "otc_tenant": "OTC-EU-DE-000000000010000xxxxx",
+  "otc_user":   "<some OTC API user>",
+  "otc_password": "<API user password>",
+  "otc_region": "eu-de",
+  "cidr_blocks_cr": "10.3.0.0/16",
+  "cidr_blocks_ma": "10.33.0.0/16",
+  "cidr_blocks_mgmt": "172.30.0.0/20",
+  "cidr_blocks_nagios": "172.30.128.0/24",
+  "cidr_blocks_pod": "10.33.0.0/16",
+  "CONSUL": "consul.internal.doaas",
+  "subnet_app_za": "id-xxx-xxx",
+  "subnet_app_zb": "id-xxx-xxx",
+  "subnet_db_za": "id-xxx-xxx",
+  "subnet_db_zb": "id-xxx-xxx",
+  "subnet_public_za": "id-xxx-xxx",
+  "subnet_public_zb": "id-xxx-xxx",
+  "subnet_web_za": "id-xxx-xxx",
+  "subnet_web_zb": "id-xxx-xxx",
+  "vpc_id": "id-xxx-xxx",
+  "otc_azs": [ "eu-de-01" ]
+}

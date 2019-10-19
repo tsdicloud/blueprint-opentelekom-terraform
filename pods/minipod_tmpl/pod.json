@@ -1,0 +1,32 @@
+{
+  "ami_id": {
+     "BASEAMIRHEL": "1075acb8-", 
+     "BASEAMIRHEL7": "65b7ed49-" 
+  },
+  "otc_region": "eu-de",
+  "chef_repo_dir": "",
+  "chef_user": "doaaschef",
+  "chef_user_key": "/home/linux/.ssh/doaaschef.pem",
+  "ebs_device_name": "/dev/unused",
+  "ebs_root_volume_size": "32",
+  "ebs_root_volume_type": "SSD",
+  "ebs_volume_type": "SAS",
+  "enable_encrypted_ebs": "false",
+  "root_cert_dir": "/etc/ssl/infaca",
+  "haproxy_key": "dev-poc1.cloud.doaas.t-systems.com.pem",
+  "key_name": "doaas_deploy",
+  "latest_ami": "false",
+  "ma_url": "https://dev-poc1-ma.cloud.doaas.t-systems.com",
+  "pod_url": "https://dev-poc1.cloud.doaas.t-systems.com",
+  "root_cert_dir": "",
+  "user_key": "/home/linux/.ssh/doaas_deploy.pem",
+  "ALERTGROUP": "doaasteam",
+  "APPLICATIONENV": "PROD|QA|DEV|STAGING|OTHERS",
+  "BUSINESSUNIT": "TSYS|ITERRA|RT|B2B|OTHERS",
+  "CONSUL": "https://consul.internal.doaas",
+  "DOMAIN": "tsys-dev-poc1-internal.doaas",
+  "INTERNALPROXY": "OFF",
+  "OWNEREMAIL": "<some-supportaddress>@t-systems.com",
+  "POD": "poc1",
+  "RUNNINGSCHEDULE": "00:00:23:59"
+}
