@@ -8,6 +8,20 @@ provider "opentelekomcloud" {
   cacert_file = "${var.otc_cacert_file}"
 }
 
+data "opentelekomcloud_vpc_v1" "admin_vpc" {
+	name = "${var.mgmt_vpc}"
+}
+
+data "opentelekomcloud_vpc_subnet_v1" "admin_sn" {
+  vpc_id = "${data.opentelekomcloud_vpc_v1.admin_vpc.id}"
+	name   = "${var.mgmt_subnet}"
+}
+
+/**
+ * Stage 1(security option): Create a new (onetime) key for the masterimage
+ * per image release
+ * note that the keys are not deleted on destroy for reuse
+
 resource "null_resource" "user_keygen" {
   triggers = {
     keyname = "${var.user_key}"
@@ -22,10 +36,6 @@ resource "null_resource" "user_keygen" {
   }
 }
 
-/**
- * Stage 1: Create a new key for the masterimage
- * note that the keys are not deleted on destroy for reuse
- */
 data "local_file" "user_pub_key" {
   depends_on = ["null_resource.user_keygen"]
   filename   = "${var.user_key}.pub"
@@ -41,19 +51,21 @@ resource "opentelekomcloud_compute_keypair_v2" "doaas-api-user" {
     prevent_destroy = "true"
   }
 }
+*/
 
 /**
  * Stage 2: Create a private, ephemeral server with natting
  * access to internet in management zone
  */
 data "local_file" "user_priv_key" {
-  depends_on = ["opentelekomcloud_compute_keypair_v2.doaas-api-user"]
+  # depends_on = ["opentelekomcloud_compute_keypair_v2.doaas-api-user"]
   filename   = "${var.user_key}"
 }
 
 locals {
   os_access = "--os-region-name \"${var.region}\" --os-username \"${var.otc_user}\" --os-password \"${var.otc_password}\" --os-domain-name \"${var.otc_tenant}\" --os-project-name \"${var.otc_project}\" --os-cacert ${var.otc_cacert_file} --os-identity-api-version 3"
 }
+
 
 data "opentelekomcloud_images_image_v2" "otcimage" {
   # name = "Enterprise_RedHat_7_prev"
@@ -73,7 +85,8 @@ resource "opentelekomcloud_compute_instance_v2" "bakery" {
   availability_zone = "eu-de-02"
   name              = "doaas-baseimage-bakery"
   flavor_id         = "s2.medium.4"
-  key_pair          = "${opentelekomcloud_compute_keypair_v2.doaas-api-user.name}"
+  # key_pair          = "${opentelekomcloud_compute_keypair_v2.doaas-api-user.name}"
+  key_pair          = "${var.key_name}"
   security_groups   = "${var.mgmt_security_groups}"
   tags              = ["BAKERY.${data.opentelekomcloud_images_image_v2.otcimage.name}"]
 
@@ -90,15 +103,15 @@ resource "opentelekomcloud_compute_instance_v2" "bakery" {
   }
 
   network {
-    uuid = "${var.mgmt_subnet_id}"
+    uuid = "${data.opentelekomcloud_vpc_subnet_v1.admin_sn.id}"
   }
 
   ###
   # Put all the hardening scripts for image here
   provisioner "remote-exec" {
     scripts = ["./manage_packages.sh",
-      "./manage_kernel_modules.sh",
-      "./install-chef.sh",
+      # "./manage_kernel_modules.sh",
+      # "./install-chef.sh",
     ]
   }
 
@@ -109,12 +122,12 @@ resource "opentelekomcloud_compute_instance_v2" "bakery" {
   #}
 
   /**
-                   * Stage 3: create image
-                   * It requires server control commands that are not supported by
-                   * Terraform yet.
-                   * Due to a (current) bug in OTC, you have to go via volume and cinder to
-                   * create an image from a server to be available in all AZ
-                   */
+   * Stage 3: create image
+   * It requires server control commands that are not supported by
+   * Terraform yet.
+   * Due to a (current) bug in OTC, you have to go via volume and cinder to
+   * create an image from a server to be available in all AZ
+   */
   provisioner "local-exec" {
     command = "./os-create-image-fix.sh ${opentelekomcloud_compute_instance_v2.bakery.id} ${opentelekomcloud_blockstorage_volume_v2.bakery_boot.id} \"${var.image_name}-${var.image_version}\" \"${var.otc_auth_url}\" ${local.os_access}"
   }

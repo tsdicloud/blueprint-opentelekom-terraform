@@ -1,19 +1,20 @@
   image_name             = "dooas-rhel7-chef-baseimage"
   image_version          = "0.99.01"
   image_size             = 14
-  key_name               = "doaas_xxxx"
-  user_key               = "/home/linux/.ssh/xxxxxxx.pem"
+  
+  key_name               = "brederle-master"
+  user_key               = "/home/linux/.ssh/brederle-master-317.pem"
   ec2_user               = "linux"
 
-  otc_region             = "eu-de"
-  otc_project            = "eu-de_doaaspoc"
-  otc_tenant             = "OTC-EU-DE-000000000010000xxxxxx"
+  region                 = "eu-de"
+  otc_project            = "eu-de_signicat"
+  otc_tenant             = "OTC00000000001000000317"
   // TODO: access information to be taken from a secure wallet
   // see terraform manual for details
-  otc_user               = "doaas_xxxx"
-  otc_password           = "xxxxxxxx"
-  otc_cacert_file        = "../terraform_otc/otc_certs.pem"
+  otc_user               = "brederle"
+  otc_password           = "SoC0mplicated4MX"
+  otc_cacert_file        = "otc_certs.pem"
 
-  mgmt_vpc               = "vpc-doaas-mgmt"
-  mgmt_subnet_id         = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  mgmt_security_groups   = ["sg-doaas-mgmt"]
+  mgmt_vpc               = "sigc-adminzone-vpc"
+  mgmt_subnet            = "sigc-adminzone-primary-sn"
+  mgmt_security_groups   = ["sigc-admin1-sg"]

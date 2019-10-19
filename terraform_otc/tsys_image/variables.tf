@@ -13,7 +13,12 @@ variable "image_size" {
   description = "Size in GB"
 }
 
-variable "mgmt_subnet_id" {
+variable "mgmt_vpc" {
+  type        = "string"
+  description = "Mgmt vpc to create images in"
+}
+
+variable "mgmt_subnet" {
   type        = "string"
   description = "Mgmt subnet to create images in"
 }
@@ -39,13 +44,13 @@ variable "ec2_user" {
   default     = "linux"
 }
 
+// --- OTC specific variables ---
 variable "region" {
   type        = "string"
   description = "Open Telekom Cloud region"
   default     = "eu-de"
 }
 
-// --- OTC specific variables ---
 variable "otc_tenant" {
   description = "Open Telekom Cloud tenant = domain"
   default     = ""

@@ -8,6 +8,6 @@ for ramdisk in $(ls -1 /boot | grep initramfs-); do
   if [ -z "$(echo $ramdisk | grep rescue)" ]; then
     echo "Rebuilding /boot/${ramdisk}"
     sudo dracut --add-drivers "hv_storvsc hv_vmbus udf" -f $ramdisk
-    sudo dracut --omit-drivers "xen-scsifront" -f $ramdisk
+    #sudo dracut --omit-drivers "xen-scsifront" -f $ramdisk
   fi
 done
